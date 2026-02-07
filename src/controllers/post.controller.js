@@ -1,4 +1,6 @@
 const postService = require('../services/post.service');
+const imageKitService = require('../services/imageKit.service');
+const APIError = require('../utils/APIError');
 
 const createPost = async (req, res) => {
     const { title, content, author, tags, published } = req.body;
@@ -56,10 +58,99 @@ const deletePost = async (req, res) => {
     }
 };
 
+const uploadPostImages = async (req, res) => {
+    if (!req.files || req.files.length === 0) {
+        throw new APIError('No files uploaded', 400);
+    }
+
+    const uploadedImages = await imageKitService.uploadMultipleImages(
+        req.files,
+        `/posts/${req.params.id}`
+    );
+
+    const imagesData = uploadedImages.map(img => ({
+        url: img.url,
+        fileId: img.fileId,
+        filePath: img.filePath
+    }));
+
+    const post = await postService.addImagesToPost(req.params.id, req.user.id, imagesData);
+
+    res.status(200).json({
+        message: 'Images uploaded successfully',
+        data: { images: post.images }
+    });
+};
+
+const deletePostImage = async (req, res) => {
+    const { id, imageId } = req.params;
+    
+    const result = await postService.deletePostImage(id, imageId, req.user.id);
+
+    if (result?.fileId) {
+        await imageKitService.deleteImage(result.fileId).catch(err => {
+            console.error('Failed to delete image from ImageKit:', err.message);
+        });
+    }
+
+    res.status(200).json({ message: 'Image deleted successfully' });
+};
+
+const searchPosts = async (req, res) => {
+    const userId = req.user?.id;
+    const result = await postService.searchPosts(req.query, userId);
+    res.status(200).json({ 
+        message: 'Search results fetched successfully', 
+        data: result.posts,
+        pagination: result.pagination
+    });
+};
+
+const getDrafts = async (req, res) => {
+    const result = await postService.getDrafts(req.user.id, req.query);
+    res.status(200).json({ 
+        message: 'Drafts fetched successfully', 
+        data: result.posts,
+        pagination: result.pagination
+    });
+};
+
+const publishPost = async (req, res) => {
+    const post = await postService.publishPost(req.params.id, req.user.id);
+    res.status(200).json({ 
+        message: 'Post published successfully', 
+        data: post 
+    });
+};
+
+const schedulePost = async (req, res) => {
+    const { publishAt } = req.body;
+    const post = await postService.schedulePost(req.params.id, req.user.id, publishAt);
+    res.status(200).json({ 
+        message: 'Post scheduled successfully', 
+        data: post 
+    });
+};
+
+const incrementViewCount = async (req, res) => {
+    const result = await postService.incrementViewCount(req.params.id);
+    res.status(200).json({ 
+        message: 'View count incremented', 
+        data: result 
+    });
+};
+
 module.exports = {
     createPost,
     getAllPosts,
     getPostById,
     updatePost,
-    deletePost
+    deletePost,
+    uploadPostImages,
+    deletePostImage,
+    searchPosts,
+    getDrafts,
+    publishPost,
+    schedulePost,
+    incrementViewCount
 };

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Comment on Your Post</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #3498db;
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            padding: 20px 0;
+        }
+        .content h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .comment-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .comment-box .commenter {
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        .comment-box .comment-content {
+            color: #555;
+            font-style: italic;
+        }
+        .post-title {
+            background-color: #e8f4fd;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .post-title strong {
+            color: #2c3e50;
+        }
+        .button {
+            display: inline-block;
+            background-color: #3498db;
+            color: #ffffff !important;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>New Comment!</h1>
+        </div>
+        <div class="content">
+            <h2>Hello {{authorName}},</h2>
+            <p>Great news! Someone commented on your post:</p>
+            
+            <div class="post-title">
+                <strong>Post:</strong> {{postTitle}}
+            </div>
+            
+            <div class="comment-box">
+                <div class="commenter">{{commenterName}} wrote:</div>
+                <div class="comment-content">"{{commentContent}}"</div>
+            </div>
+            
+            <p style="text-align: center;">
+                <a href="{{postUrl}}" class="button">View Comment</a>
+            </p>
+            
+            <p>Keep up the great content!</p>
+        </div>
+        <div class="footer">
+            <p>You're receiving this because someone commented on your post.</p>
+            <p>&copy; 2024 Blog Platform. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

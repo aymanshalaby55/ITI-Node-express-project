@@ -1,0 +1,81 @@
+version: '3.8'
+
+# Development Docker Compose - with hot reload
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: blog-server-dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - MONGO_URI=mongodb://mongo:27017
+      - DB_NAME=blog-server-dev
+      - JWT_SECRET=dev-secret-key-change-in-production
+      - JWT_EXPIRES_IN=7d
+      - SMTP_HOST=${SMTP_HOST:-smtp.gmail.com}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - EMAIL_FROM=${EMAIL_FROM:-noreply@blog.com}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
+      - IMAGEKIT_PUBLIC_KEY=${IMAGEKIT_PUBLIC_KEY}
+      - IMAGEKIT_PRIVATE_KEY=${IMAGEKIT_PRIVATE_KEY}
+      - IMAGEKIT_URL_ENDPOINT=${IMAGEKIT_URL_ENDPOINT}
+      - LOG_LEVEL=debug
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - blog-network-dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ./logs:/app/logs
+
+  mongo:
+    image: mongo:7
+    container_name: blog-mongo-dev
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=blog-server-dev
+    volumes:
+      - mongo-data-dev:/data/db
+    networks:
+      - blog-network-dev
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: blog-mongo-express-dev
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=admin
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - blog-network-dev
+
+networks:
+  blog-network-dev:
+    driver: bridge
+
+volumes:
+  mongo-data-dev:

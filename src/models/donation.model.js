@@ -4,11 +4,13 @@ const mongoose = require('mongoose');
 const DonationSchema = new mongoose.Schema({
     sessionId: {
         type: String,
-        required: true
+        required: true,
+        index: true
     },
     orderId: {
         type: String,
-        required: true
+        required: true,
+        index: true
     },
     amount: {
         type: Number,
@@ -17,7 +19,8 @@ const DonationSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: ["PENDING", "PAID", "FAILED", "REFUNDED"],
-        default: "PENDING"
+        default: "PENDING",
+        index: true
     },
     sessionURL: {
         type: String
@@ -26,6 +29,9 @@ const DonationSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.Mixed
     }
 }, { timestamps: true });
+
+// Compound index for status queries
+DonationSchema.index({ status: 1, createdAt: -1 });
 
 // model
 const DonationModel = mongoose.model('Donation', DonationSchema);

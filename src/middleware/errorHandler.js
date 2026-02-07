@@ -1,7 +1,9 @@
 const APIError = require('../utils/APIError');
+const logger = require('../utils/logger');
 
 module.exports = (err, req, res, next) => {
-    console.error("❌❌ Error:", err.stack);
+    // Log the error
+    logger.logError(err, req);
 
     if (err instanceof APIError) {
         return res.status(err.statusCode).json({ message: err.message, success: false, isClientError: err.isClientError })
@@ -18,6 +20,13 @@ module.exports = (err, req, res, next) => {
         return res.status(400).json({ message: err.message, success: false, isClientError: true })
     }
 
+    // Log unexpected errors at error level
+    logger.error('Unexpected error', { 
+        error: err.message, 
+        stack: err.stack,
+        url: req.originalUrl,
+        method: req.method
+    });
 
     res.status(500).json({ message: "Internal server error", success: false, isClientError: false })
 }

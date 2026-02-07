@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Our Blog</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #4a90a4;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #4a90a4;
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            padding: 20px 0;
+        }
+        .content h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .button {
+            display: inline-block;
+            background-color: #4a90a4;
+            color: #ffffff !important;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .button:hover {
+            background-color: #3a7a8a;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 12px;
+        }
+        .features {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .features ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .features li {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to Our Blog!</h1>
+        </div>
+        <div class="content">
+            <h2>Hello {{name}}!</h2>
+            <p>Thank you for joining our community! We're excited to have you on board.</p>
+            <p>Your account has been successfully created with the email: <strong>{{email}}</strong></p>
+            
+            <div class="features">
+                <p><strong>What you can do now:</strong></p>
+                <ul>
+                    <li>Create and publish blog posts</li>
+                    <li>Comment on posts from other users</li>
+                    <li>Like and bookmark your favorite content</li>
+                    <li>Follow other users and build your network</li>
+                </ul>
+            </div>
+            
+            <p style="text-align: center;">
+                <a href="{{frontendUrl}}" class="button">Get Started</a>
+            </p>
+            
+            <p>If you have any questions, feel free to reach out to our support team.</p>
+            <p>Happy blogging!</p>
+        </div>
+        <div class="footer">
+            <p>This email was sent to {{email}}</p>
+            <p>&copy; 2024 Blog Platform. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
